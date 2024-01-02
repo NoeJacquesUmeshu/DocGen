@@ -93,7 +93,7 @@ namespace DocGen
         private static async Task WriteHtmlToFile(StringBuilder html, string fileName)
         {
             Console.WriteLine(fileName);
-            using (StreamWriter writer = new StreamWriter($"{fileName}.html"))
+            using (StreamWriter writer = new StreamWriter($"{Program.OutputFolder}/{fileName}.html"))
             {
                 await writer.WriteAsync(html.ToString());
             }

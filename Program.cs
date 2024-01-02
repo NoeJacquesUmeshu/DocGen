@@ -3,6 +3,7 @@ using DocGen;
 
 public static class Program
 {
+    public static string OutputFolder = "";
     private static async Task Main(string[] args)
     {
         if (!ValidatePathFromUserArguments(args, out string? path))
@@ -14,7 +15,14 @@ public static class Program
             Console.WriteLine("No valid directory was provided. Cancelling operation.");
             return;
         }
+        OutputFolder = $"_Documentation_{new DirectoryInfo(path).Name}";
+        string fullPath = Path.Combine(System.Environment.CurrentDirectory, OutputFolder);
+        if (!Directory.Exists(fullPath))
+        {
+            Directory.CreateDirectory(fullPath);
+        }
         Console.WriteLine($"Starting operation for {path}...");
+        Console.WriteLine($"Output folder : {fullPath}");
         await GenerateForFolder(path);
         Console.WriteLine("Operation complete !");
     }
@@ -62,6 +70,4 @@ public static class Program
         path = null;
         return false;
     }
-
-
 }
