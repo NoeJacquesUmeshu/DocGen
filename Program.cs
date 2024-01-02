@@ -6,13 +6,14 @@ public static class Program
     public static string OutputFolder = "";
     private static async Task Main(string[] args)
     {
+        foreach (string item in args) Console.WriteLine(item);
         if (!ValidatePathFromUserArguments(args, out string? path))
         {
             path = GetPathFromUserInput();
         }
         if (path == null)
         {
-            Console.WriteLine("No valid directory was provided. Cancelling operation.");
+            Console.WriteLine("Cancelling operation.");
             return;
         }
         OutputFolder = $"_Documentation_{new DirectoryInfo(path).Name}";
@@ -21,9 +22,11 @@ public static class Program
         {
             Directory.CreateDirectory(fullPath);
         }
-        Console.WriteLine($"Starting operation for {path}...");
         Console.WriteLine($"Output folder : {fullPath}");
+        Console.WriteLine($"Starting operation for {path}...");
+        Console.WriteLine("--------------------------------");
         await GenerateForFolder(path);
+        Console.WriteLine("--------------------------------");
         Console.WriteLine("Operation complete !");
     }
 
@@ -52,11 +55,12 @@ public static class Program
     private static string? GetPathFromUserInput()
     {
         string? path = null;
-        while (!Directory.Exists(path) || path?.ToLower() == "cancel")
+        while (!Directory.Exists(path) && path?.ToLower() != "cancel")
         {
             Console.WriteLine("Please enter a valid directory path. Enter \"Cancel\" to exit the process.");
             path = Console.ReadLine();
         }
+        Console.WriteLine(path + Directory.Exists(path));
         return path;
     }
 
@@ -67,6 +71,7 @@ public static class Program
             path = args[0];
             return true;
         }
+
         path = null;
         return false;
     }
