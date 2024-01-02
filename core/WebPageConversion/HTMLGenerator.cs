@@ -11,12 +11,6 @@ namespace DocGen
 {
     public class HtmlGenerator
     {
-        public readonly string path;
-        private HtmlGenerator(string path)
-        {
-            this.path = path;
-        }
-
         public static async Task ToHTML(CodeParser parser)
         {
             await Write(parser.NodeInfo);
@@ -37,13 +31,13 @@ namespace DocGen
                     await GenerateHTMLForEnum(enumInfo);
                 }
         }
-        
-        private static async Task GenerateHTMLForEnum(EnumDeclarationInfo info)
+        private static async Task WriteNewHTML<T>(T info, Action<T, StringBuilder> writer) where T : IDeclarationInfo
         {
             StringBuilder html = new();
-            WriteEnumToHTML(info, html);
+            writer.Invoke(info, html);
             await WriteHtmlToFile(html, info.Name);
         }
+        private static async Task GenerateHTMLForEnum(EnumDeclarationInfo info) => await WriteNewHTML(info, WriteEnumToHTML);
         private static void WriteEnumToHTML(EnumDeclarationInfo info, StringBuilder html)
         {
             html.AppendLine("<div>");
@@ -53,16 +47,14 @@ namespace DocGen
 
         private static async Task GenerateHtmlForIObject(IObjetDeclarationInfo info)
         {
-            StringBuilder html = new();
-            WriteNewObjectToHTML(info, html);
-            await WriteHtmlToFile(html!, info.Name);
+            await WriteNewHTML(info, WriteObjectToHTML);
             foreach (var member in info.NestedClasses)
             {
                 await GenerateHtmlForIObject(member);
             }
         }
 
-        private static void WriteNewObjectToHTML(IObjetDeclarationInfo info, StringBuilder html)
+        private static void WriteObjectToHTML(IObjetDeclarationInfo info, StringBuilder html)
         {
             html.AppendLine("<div>");
             html.AppendLine("<h1>" + info.GetType().Name + "</h1>");

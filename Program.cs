@@ -16,7 +16,7 @@ public static class Program
             Console.WriteLine("Cancelling operation.");
             return;
         }
-        OutputFolder = $"_Documentation_{new DirectoryInfo(path).Name}";
+        OutputFolder = $"output/Documentation_{new DirectoryInfo(path).Name}";
         string fullPath = Path.Combine(System.Environment.CurrentDirectory, OutputFolder);
         if (!Directory.Exists(fullPath))
         {

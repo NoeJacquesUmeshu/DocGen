@@ -100,6 +100,8 @@ public abstract class DeclarationInfo<T> : IDeclarationInfo where T : SyntaxNode
                 return destructor.Identifier.ValueText;
             case BaseTypeDeclarationSyntax typeDeclarationSyntax:
                 return typeDeclarationSyntax.Identifier.ValueText;
+            case EnumMemberDeclarationSyntax member:
+                return member.Identifier.ValueText;
             default:
                 return "";
         }
