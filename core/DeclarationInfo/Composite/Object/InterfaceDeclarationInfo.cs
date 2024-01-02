@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-public class InterfaceDeclarationInfo : DeclarationInfo<InterfaceDeclarationSyntax>
+public class InterfaceDeclarationInfo : ObjectDeclarationInfo<InterfaceDeclarationSyntax>
 {
     public InterfaceDeclarationInfo(InterfaceDeclarationSyntax syntax) : base(syntax)
     {
