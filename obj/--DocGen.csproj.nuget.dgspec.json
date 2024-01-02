@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Noé Jacques\\Desktop\\PureC#\\--DocGen\\--DocGen.csproj": {}
+    "D:\\Work\\DocGen\\--DocGen.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Noé Jacques\\Desktop\\PureC#\\--DocGen\\--DocGen.csproj": {
+    "D:\\Work\\DocGen\\--DocGen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Noé Jacques\\Desktop\\PureC#\\--DocGen\\--DocGen.csproj",
+        "projectUniqueName": "D:\\Work\\DocGen\\--DocGen.csproj",
         "projectName": "--DocGen",
-        "projectPath": "C:\\Users\\Noé Jacques\\Desktop\\PureC#\\--DocGen\\--DocGen.csproj",
-        "packagesPath": "C:\\Users\\Noé Jacques\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Noé Jacques\\Desktop\\PureC#\\--DocGen\\obj\\",
+        "projectPath": "D:\\Work\\DocGen\\--DocGen.csproj",
+        "packagesPath": "C:\\Users\\Umeshu PC-MAT-07\\.nuget\\packages\\",
+        "outputPath": "D:\\Work\\DocGen\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Noé Jacques\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Umeshu PC-MAT-07\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -56,12 +60,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[7.0.14, 7.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[7.0.14, 7.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[7.0.14, 7.0.14]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[7.0.14, 7.0.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
