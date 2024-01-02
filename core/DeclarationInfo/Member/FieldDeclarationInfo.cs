@@ -5,4 +5,5 @@ public class FieldDeclarationInfo : MemberDeclarationInfo<FieldDeclarationSyntax
     public FieldDeclarationInfo(FieldDeclarationSyntax syntax) : base(syntax)
     {
     }
+    public override string Type => "Field";
 }
