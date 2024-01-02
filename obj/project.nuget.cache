@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+Hl8jJSdNphrFQ0zPOO3zMN88IAwM4aMs+u5Bi5mgov785Fce8TGdkR5yJ5MXk4AU/lLIuTrDJuRl+z0qtSsIg==",
+  "dgSpecHash": "CQrhjUlTHLpyMYGtv8Vu8nZR7Dohn7du2l4EAGZ6PRdflz92ByBs95wRtSjgQqVa4q8tUbdszj1IZh1f3XVWxg==",
   "success": true,
-  "projectFilePath": "D:\\Work\\DocGen\\--DocGen.csproj",
+  "projectFilePath": "D:\\Work\\DocGen\\DocGen.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Umeshu PC-MAT-07\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.4\\microsoft.codeanalysis.analyzers.3.3.4.nupkg.sha512",
     "C:\\Users\\Umeshu PC-MAT-07\\.nuget\\packages\\microsoft.codeanalysis.common\\4.8.0\\microsoft.codeanalysis.common.4.8.0.nupkg.sha512",

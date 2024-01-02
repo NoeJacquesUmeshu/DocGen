@@ -5,4 +5,6 @@ public class MethodDeclarationInfo<T> : DeclarationInfo<T> where T : BaseMethodD
     public MethodDeclarationInfo(T syntax) : base(syntax)
     {
     }
+
+    public override string Type => "";
 }

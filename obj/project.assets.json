@@ -997,9 +997,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Work\\DocGen\\--DocGen.csproj",
-      "projectName": "--DocGen",
-      "projectPath": "D:\\Work\\DocGen\\--DocGen.csproj",
+      "projectUniqueName": "D:\\Work\\DocGen\\DocGen.csproj",
+      "projectName": "DocGen",
+      "projectPath": "D:\\Work\\DocGen\\DocGen.csproj",
       "packagesPath": "C:\\Users\\Umeshu PC-MAT-07\\.nuget\\packages\\",
       "outputPath": "D:\\Work\\DocGen\\obj\\",
       "projectStyle": "PackageReference",

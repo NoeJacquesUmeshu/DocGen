@@ -7,6 +7,9 @@ public class MemberDeclarationInfo<T> : DeclarationInfo<T> where T : MemberDecla
 
     }
 
+    public override string Type => type;
+    protected virtual string type => "";
+    
     /*  public string ReturnType
      {
          get

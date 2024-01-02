@@ -9,7 +9,6 @@ namespace DocGen
         private CodeParser(ICompositeDeclarationInfo nodeInfo)
         {
             NodeInfo = nodeInfo;
-            Console.WriteLine("Node info created");
         }
 
         public ICompositeDeclarationInfo NodeInfo { get; private set; }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DocGen
 {
@@ -18,21 +19,36 @@ namespace DocGen
 
         public static async Task ToHTML(CodeParser parser)
         {
-            await WriteRecursive(parser.NodeInfo);
+            await Write(parser.NodeInfo);
         }
-        private static async Task WriteRecursive(IDeclarationInfo info)
+        private static async Task Write(ICompositeDeclarationInfo info)
         {
             if (info is null)
             {
                 return;
             }
-            if (info as FileDeclarationInfo is FileDeclarationInfo fileInfo)
-                foreach (var child in fileInfo.Childrens)
-                    if (child as IObjetDeclarationInfo is IObjetDeclarationInfo objectInfo)
-                    {
-                        await GenerateHtmlForIObject(objectInfo);
-                    }
-
+            foreach (var child in info.Childrens)
+                if (child as IObjetDeclarationInfo is IObjetDeclarationInfo objectInfo)
+                {
+                    await GenerateHtmlForIObject(objectInfo);
+                }
+                else if (child is EnumDeclarationInfo enumInfo)
+                {
+                    await GenerateHTMLForEnum(enumInfo);
+                }
+        }
+        
+        private static async Task GenerateHTMLForEnum(EnumDeclarationInfo info)
+        {
+            StringBuilder html = new();
+            WriteEnumToHTML(info, html);
+            await WriteHtmlToFile(html, info.Name);
+        }
+        private static void WriteEnumToHTML(EnumDeclarationInfo info, StringBuilder html)
+        {
+            html.AppendLine("<div>");
+            GenerateHtmlForMember("Enum Members", info.EnumMembers, html);
+            html.AppendLine("</div>");
         }
 
         private static async Task GenerateHtmlForIObject(IObjetDeclarationInfo info)
@@ -54,17 +70,17 @@ namespace DocGen
             html.AppendLine("<p>Name: " + info.Name + "</p>");
             html.AppendLine("<p>Summary: " + info.Summary + "</p>");
 
-            GenerateHtmlForIObjectMember("Fields", info.Fields, html);
-            GenerateHtmlForIObjectMember("Properties", info.Properties, html);
-            GenerateHtmlForIObjectMember("Constructors", info.Constructors, html);
-            GenerateHtmlForIObjectMember("Methods", info.Methods, html);
-            GenerateHtmlForIObjectMember("Destructors", info.Destructors, html);
-            GenerateHtmlForIObjectMember("Nested Classes", info.NestedClasses, html);
+            GenerateHtmlForMember("Fields", info.Fields, html);
+            GenerateHtmlForMember("Properties", info.Properties, html);
+            GenerateHtmlForMember("Constructors", info.Constructors, html);
+            GenerateHtmlForMember("Methods", info.Methods, html);
+            GenerateHtmlForMember("Destructors", info.Destructors, html);
+            GenerateHtmlForMember("Nested Classes", info.NestedClasses, html);
 
             html.AppendLine("</div>");
         }
 
-        private static void GenerateHtmlForIObjectMember<T>(string memberName, IEnumerable<T> members, StringBuilder html) where T : IDeclarationInfo
+        private static void GenerateHtmlForMember<T>(string memberName, IEnumerable<T> members, StringBuilder html) where T : IDeclarationInfo
         {
             html.AppendLine($"<h2>{memberName}</h2>");
             foreach (var member in members)
@@ -73,8 +89,6 @@ namespace DocGen
                 {
                     WriteObjectToExistingObjectHTML(childObject, html);
                 }
-
-                // check for type and fill HTML
             }
         }
         private static void WriteObjectToExistingObjectHTML(IObjetDeclarationInfo info, StringBuilder html)

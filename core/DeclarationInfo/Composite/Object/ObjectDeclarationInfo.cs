@@ -20,5 +20,6 @@ public class ObjectDeclarationInfo<T> : CompositeDeclarationInfo<T>, IObjetDecla
     public IReadOnlyCollection<MethodDeclarationInfo<MethodDeclarationSyntax>> Methods => GetChildrens<MethodDeclarationInfo<MethodDeclarationSyntax>, MethodDeclarationSyntax>().ToList();
     public IReadOnlyCollection<MethodDeclarationInfo<DestructorDeclarationSyntax>> Destructors => GetChildrens<MethodDeclarationInfo<DestructorDeclarationSyntax>, DestructorDeclarationSyntax>().ToList();
     public IReadOnlyCollection<ClassDeclarationInfo> NestedClasses => GetChildrens<ClassDeclarationInfo, ClassDeclarationSyntax>().ToList();
-    // public IReadOnlyCollection<>
+
+    public override string Type => Syntax is ClassDeclarationSyntax ? "Class" : Syntax is StructDeclarationSyntax ? "Struct" : "";
 }

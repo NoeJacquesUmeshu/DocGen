@@ -28,6 +28,8 @@ public abstract class DeclarationInfo<T> : IDeclarationInfo where T : SyntaxNode
     public Accessibility Accessibility { get; private set; }
     public string Name { get; private set; }
     public string Summary { get; private set; }
+    public abstract string Type { get; }
+    public virtual string FullName => $"{Accessibility} {Type} {Name}";
 
 
     private Accessibility GetAccessibility()
@@ -96,7 +98,8 @@ public abstract class DeclarationInfo<T> : IDeclarationInfo where T : SyntaxNode
                 return constructor.Identifier.ValueText;
             case DestructorDeclarationSyntax destructor:
                 return destructor.Identifier.ValueText;
-            // Add more cases as needed
+            case BaseTypeDeclarationSyntax typeDeclarationSyntax:
+                return typeDeclarationSyntax.Identifier.ValueText;
             default:
                 return "";
         }
@@ -118,22 +121,21 @@ public abstract class DeclarationInfo<T> : IDeclarationInfo where T : SyntaxNode
                 return new PropertyDeclarationInfo(property);
             case FieldDeclarationSyntax field:
                 return new FieldDeclarationInfo(field);
-            // case EventDeclarationSyntax eventDeclaration:
-            //     return new EventDeclarationInfo(eventDeclaration);
-
-
-            // case StructDeclarationSyntax @struct:
-            //     return new StructDeclarationInfo(@struct);
-            // case EnumDeclarationSyntax @enum:
-            //     return new EnumDeclarationInfo(@enum);
-            // case InterfaceDeclarationSyntax @interface:
-            //     return new InterfaceDeclarationInfo(@interface);
-            // case DelegateDeclarationSyntax @delegate:
-            //     return new DelegateDeclarationInfo(@delegate);
+            case EventDeclarationSyntax eventDeclaration:
+                return new EventDeclarationInfo(eventDeclaration);
+            case StructDeclarationSyntax @struct:
+                return new StructDeclarationInfo(@struct);
+            case EnumDeclarationSyntax @enum:
+                return new EnumDeclarationInfo(@enum);
+            case EnumMemberDeclarationSyntax enumMember:
+                return new MemberDeclarationInfo<EnumMemberDeclarationSyntax>(enumMember);
+            case InterfaceDeclarationSyntax @interface:
+                return new InterfaceDeclarationInfo(@interface);
+            case DelegateDeclarationSyntax @delegate:
+                return new DelegateDeclarationInfo(@delegate);
             case CompilationUnitSyntax compilationUnit:
                 return new FileDeclarationInfo(compilationUnit);
             default: return null!;
-                // throw new NotImplementedException();
         }
     }
 

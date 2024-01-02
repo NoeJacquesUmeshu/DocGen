@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v7.0": {
-      "--DocGen/1.0.0": {
+      "DocGen/1.0.0": {
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp": "4.8.0"
         },
         "runtime": {
-          "--DocGen.dll": {}
+          "DocGen.dll": {}
         }
       },
       "Microsoft.CodeAnalysis.Analyzers/3.3.4": {},
@@ -132,7 +132,7 @@
     }
   },
   "libraries": {
-    "--DocGen/1.0.0": {
+    "DocGen/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

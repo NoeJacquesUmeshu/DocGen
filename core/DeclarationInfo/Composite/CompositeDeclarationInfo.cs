@@ -7,7 +7,7 @@ public interface ICompositeDeclarationInfo : IDeclarationInfo
 {
     public IEnumerable<IDeclarationInfo> Childrens { get; }
 }
-public class CompositeDeclarationInfo<T> : DeclarationInfo<T>, ICompositeDeclarationInfo where T : SyntaxNode
+public abstract class CompositeDeclarationInfo<T> : DeclarationInfo<T>, ICompositeDeclarationInfo where T : SyntaxNode
 {
     public IEnumerable<IDeclarationInfo> Childrens => GetChildNodes();
 
@@ -20,14 +20,12 @@ public class CompositeDeclarationInfo<T> : DeclarationInfo<T>, ICompositeDeclara
     {
         foreach (var node in Syntax.ChildNodes())
         {
-
             var nodeInfo = DeclarationInfo<SyntaxNode>.Create(node);
             if (nodeInfo is null || nodeInfo == this)
             {
                 continue;
             }
             yield return nodeInfo;
-
         }
     }
 
@@ -39,5 +37,4 @@ public class CompositeDeclarationInfo<T> : DeclarationInfo<T>, ICompositeDeclara
                 yield return (U)child;
         }
     }
-
 }
