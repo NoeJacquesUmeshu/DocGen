@@ -12,7 +12,6 @@ public class MemberDeclarationInfo<T> : DeclarationInfo<T> where T : MemberDecla
     }
 
     public override string FullName => $"{ReturnType} {base.FullName}";
-    public override string Type => type;
-    protected virtual string type => "";
+    public override string Type => "";
     public string ReturnType => "";
 }

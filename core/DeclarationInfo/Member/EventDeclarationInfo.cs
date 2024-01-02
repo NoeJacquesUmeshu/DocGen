@@ -6,7 +6,7 @@ public class EventDeclarationInfo : MemberDeclarationInfo<EventDeclarationSyntax
     public EventDeclarationInfo(EventDeclarationSyntax syntax) : base(syntax)
     {
     }
-    protected override string type => "Event";
+    public override string Type => "Event";
 }
 
 

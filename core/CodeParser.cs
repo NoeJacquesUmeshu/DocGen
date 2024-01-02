@@ -13,9 +13,6 @@ namespace DocGen
 
         public ICompositeDeclarationInfo NodeInfo { get; private set; }
 
-
-
-
         public static async Task<CodeParser> Create(string filePath)
         {
             var rootInfo = await CreateRootInfo(filePath);
@@ -28,7 +25,7 @@ namespace DocGen
             var text = await File.ReadAllTextAsync(filePath);
             var tree = CSharpSyntaxTree.ParseText(text);
             var root = tree.GetRoot();
-            var declaration = (CompositeDeclarationInfo<CompilationUnitSyntax>.Create((root as CompilationUnitSyntax)!) as ICompositeDeclarationInfo)!;
+            var declaration = (FileDeclarationInfo.Create(root) as ICompositeDeclarationInfo)!;
             return declaration;
         }
     }
