@@ -8,6 +8,7 @@ public interface IDeclarationInfo
     public Accessibility Accessibility { get; }
     public string Name { get; }
     public string Summary { get; }
+    public string FullName { get; }
 }
 /// <summary>
 /// Represents an abstract class that provides information about a declaration.

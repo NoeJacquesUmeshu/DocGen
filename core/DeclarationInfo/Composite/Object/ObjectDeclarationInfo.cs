@@ -8,6 +8,7 @@ public interface IObjetDeclarationInfo : ICompositeDeclarationInfo
     public IReadOnlyCollection<MethodDeclarationInfo<MethodDeclarationSyntax>> Methods { get; }
     public IReadOnlyCollection<MethodDeclarationInfo<DestructorDeclarationSyntax>> Destructors { get; }
     public IReadOnlyCollection<ClassDeclarationInfo> NestedClasses { get; }
+    public IReadOnlyCollection<ICompositeDeclarationInfo> Nested { get; }
 }
 public class ObjectDeclarationInfo<T> : CompositeDeclarationInfo<T>, IObjetDeclarationInfo where T : BaseTypeDeclarationSyntax
 {
@@ -22,4 +23,6 @@ public class ObjectDeclarationInfo<T> : CompositeDeclarationInfo<T>, IObjetDecla
     public IReadOnlyCollection<ClassDeclarationInfo> NestedClasses => GetChildrens<ClassDeclarationInfo, ClassDeclarationSyntax>().ToList();
 
     public override string Type => Syntax is ClassDeclarationSyntax ? "Class" : Syntax is StructDeclarationSyntax ? "Struct" : "";
+
+    public IReadOnlyCollection<ICompositeDeclarationInfo> Nested => Childrens.OfType<ICompositeDeclarationInfo>().ToList();
 }

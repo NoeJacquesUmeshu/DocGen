@@ -32,9 +32,14 @@ public static class Program
 
     private static async Task GenerateForFolder(string path)
     {
-        Console.WriteLine($"Generating documentation for {path}...");
+        var csFiles = GetCSFilesInPath(path);
+        if (csFiles.Length < 1)
+        {
+            return;
+        }
+        Console.WriteLine($"Generating documentation for {path}");
         var tasks = new List<Task>();
-        foreach (var csFilePath in GetCSFilesInPath(path))
+        foreach (var csFilePath in csFiles)
         {
             tasks.Add(GenerateFileDocumentation(csFilePath));
         }

@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-public class DelegateDeclarationInfo : DeclarationInfo<DelegateDeclarationSyntax>
+public class DelegateDeclarationInfo : MemberDeclarationInfo<DelegateDeclarationSyntax>
 {
     public DelegateDeclarationInfo(DelegateDeclarationSyntax syntax) : base(syntax)
     {
