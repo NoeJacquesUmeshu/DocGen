@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -5,13 +6,12 @@ public interface IMemberDeclarationInfo : IDeclarationInfo
 {
     public string ReturnType { get; }
 }
-public class MemberDeclarationInfo<T> : DeclarationInfo<T> where T : MemberDeclarationSyntax
+public class MemberDeclarationInfo<T> : DeclarationInfo<T>, IMemberDeclarationInfo where T : MemberDeclarationSyntax
 {
     public MemberDeclarationInfo(T syntax) : base(syntax)
     {
     }
-
-    public override string FullName => $"{ReturnType} {base.FullName}";
-    public override string Type => "";
-    public string ReturnType => "";
+    public override string FullName => $"{AccessAndModifier} {MemberType}{(!string.IsNullOrEmpty(ReturnType) ? $" {MemberType}" : "")} {Name}";
+    public override string MemberType => "";
+    public virtual string ReturnType => "";
 }

@@ -5,10 +5,10 @@ public class EnumDeclarationInfo : CompositeDeclarationInfo<EnumDeclarationSynta
 {
     public EnumDeclarationInfo(EnumDeclarationSyntax syntax) : base(syntax)
     {
-        
+
     }
     public IReadOnlyCollection<IDeclarationInfo> EnumMembers => GetChildrens<MemberDeclarationInfo<EnumMemberDeclarationSyntax>, EnumMemberDeclarationSyntax>().ToList();
 
-    public override string Type => "Enum";
+    public override string MemberType => "Enum";
 }
 

@@ -6,4 +6,5 @@ public class StructDeclarationInfo : ObjectDeclarationInfo<StructDeclarationSynt
     public StructDeclarationInfo(StructDeclarationSyntax syntax) : base(syntax)
     {
     }
+    public override string MemberType => "Struct";
 }

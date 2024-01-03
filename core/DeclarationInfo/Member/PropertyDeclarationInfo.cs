@@ -5,5 +5,5 @@ public class PropertyDeclarationInfo : MemberDeclarationInfo<PropertyDeclaration
     public PropertyDeclarationInfo(PropertyDeclarationSyntax syntax) : base(syntax)
     {
     }
-    public override string Type => "Property";
+    public override string ReturnType => "Property";
 }

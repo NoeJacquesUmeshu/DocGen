@@ -6,6 +6,7 @@ public class DelegateDeclarationInfo : MemberDeclarationInfo<DelegateDeclaration
     {
     }
 
-    public override string Type => "Delegate";
+    public override string MemberType => "Delegate";
+    public override string ReturnType => Syntax.ReturnType.ToString();
 }
 

@@ -23,7 +23,7 @@ namespace DocGen
             }
             var tasks = new List<Task>();
             foreach (ICompositeDeclarationInfo childInfo in info.Childrens)
-               tasks.Add(WriteCompositeHTML(childInfo));
+                tasks.Add(WriteCompositeHTML(childInfo));
             await Task.WhenAll(tasks);
         }
 
@@ -41,21 +41,22 @@ namespace DocGen
             }
         }
 
-        private static async Task WriteNewHTML<T>(T info, Action<T, StringBuilder> writer) where T : IDeclarationInfo
-        {
-            StringBuilder html = new();
-            writer.Invoke(info, html);
-            await WriteHtmlToFile(html, info.Name);
-        }
-        private static async Task WriteEnumHTML(EnumDeclarationInfo info) => await WriteNewHTML(info, GenerateHTMLContentForEnum);
-
+        private static async Task WriteEnumHTML(EnumDeclarationInfo info) => await WriteHTMLContent(info, GenerateHTMLContentForEnum);
         private static async Task WriteObjectHTML(IObjetDeclarationInfo info)
         {
-            await WriteNewHTML(info, GenerateHTMLContentForObject);
-            foreach (var member in info.Nested)
+            await WriteHTMLContent(info, GenerateHTMLContentForObject);
+            List<Task> tasks = new();
+            foreach (var member in info.NestedDeclaration)
             {
-                await WriteCompositeHTML(member);
+                tasks.Add(WriteCompositeHTML(member));
             }
+            await Task.WhenAll(tasks);
+        }
+        private static async Task WriteHTMLContent<T>(T info, Action<T, StringBuilder> contentWriter) where T : IDeclarationInfo
+        {
+            StringBuilder html = new();
+            contentWriter.Invoke(info, html);
+            await WriteHtmlToFile(html, info.Name);
         }
 
         #endregion
@@ -65,27 +66,56 @@ namespace DocGen
         private static void GenerateHTMLContentForEnum(EnumDeclarationInfo info, StringBuilder html)
         {
             html.AppendLine("<div>");
-            GenerateHtmlContentForInfos("Enum Members", info.EnumMembers, html);
+            html.AppendLine($"<h1>{info.FullName}</h1>");  // Add the name of the enum
+            html.AppendLine("<ul>");
+
+            foreach (var member in info.EnumMembers)  // Loop through the enum members
+            {
+                html.AppendLine($"<li>{member.Name}</li>");  // Add each member to the list
+            }
+
+            html.AppendLine("</ul>");
             html.AppendLine("</div>");
         }
-
         private static void GenerateHTMLContentForObject(IObjetDeclarationInfo info, StringBuilder html)
         {
+            bool isInterface = info as InterfaceDeclarationInfo is InterfaceDeclarationInfo;
             html.AppendLine("<div>");
             html.AppendLine("<h1>" + info.Name + "</h1>");
             html.AppendLine("<p>" + info.FullName + "</p>");
             html.AppendLine("<p>Summary: " + info.Summary + "</p>");
+            html.AppendLine($"<p>Remarks : {string.Join(", ", info.Remarks)}</p>");
 
-            GenerateHtmlContentForInfos("Fields", info.Fields, html);
+            if (!isInterface)
+            {
+                GenerateHtmlContentForInfos("Fields", info.Fields, html);
+            }
             GenerateHtmlContentForInfos("Properties", info.Properties, html);
-            GenerateHtmlContentForInfos("Constructors", info.Constructors, html);
+            if (!isInterface)
+            {
+                GenerateHtmlContentForInfos("Constructors", info.Constructors, html);
+            }
             GenerateHtmlContentForInfos("Methods", info.Methods, html);
-            GenerateHtmlContentForInfos("Destructors", info.Destructors, html);
-            GenerateHtmlContentForInfos("Nested", info.Nested, html);
+            if (!isInterface)
+            {
+                GenerateHtmlContentForInfos("Destructors", info.Destructors, html);
+            }
+            GenerateHtmlContentForInfos("Nested Declaration", info.NestedDeclaration, html);
 
             html.AppendLine("</div>");
         }
 
+        private static void GenerateHTMLContentForMember(IMemberDeclarationInfo info, StringBuilder html)
+        {
+            html.AppendLine($"<p>{info.FullName}</p>");
+            html.AppendLine($"<p>Summary : {info.Summary}</p>");
+            if (info as IMethodDeclarationInfo is IMethodDeclarationInfo method)
+            {
+                html.AppendLine($"<p>Parameters : {method.Parameters}</p>");
+                html.AppendLine($"<p>Returns : {method.Returns}</p>");
+                html.AppendLine($"<p>Exceptions : {string.Join(", ", method.Exceptions)}</p>");
+            }
+        }
         private static void GenerateHtmlContentForInfos<T>(string memberName, IEnumerable<T> infos, StringBuilder html) where T : IDeclarationInfo
         {
             html.AppendLine($"<h2>{memberName}</h2>");
@@ -104,14 +134,6 @@ namespace DocGen
             }
         }
 
-        private static void GenerateHTMLContentForMember(IMemberDeclarationInfo info, StringBuilder html)
-        {
-            html.AppendLine("<h1>");
-            html.AppendLine($"{info.Name}");
-            html.AppendLine("</h1>");
-            html.AppendLine($"<p>{info.FullName}</p>");
-            html.AppendLine($"<p>Summary : {info.Summary}");
-        }
 
         private static void GenerateHMTLContentForComposite(ICompositeDeclarationInfo info, StringBuilder html)
         {

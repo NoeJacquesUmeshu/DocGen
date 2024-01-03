@@ -6,5 +6,5 @@ public class FileDeclarationInfo : CompositeDeclarationInfo<CompilationUnitSynta
     {
     }
 
-    public override string Type => "File";
+    public override string MemberType => "File";
 }

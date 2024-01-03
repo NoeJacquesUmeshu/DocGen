@@ -7,7 +7,7 @@ public class InterfaceDeclarationInfo : ObjectDeclarationInfo<InterfaceDeclarati
     {
     }
 
-    public override string Type => "Interface";
+    public override string MemberType => "Interface";
 }
 
 

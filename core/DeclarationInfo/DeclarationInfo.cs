@@ -7,8 +7,10 @@ public interface IDeclarationInfo
 {
     public Accessibility Accessibility { get; }
     public string Name { get; }
-    public string Summary { get; }
     public string FullName { get; }
+    public bool IsStatic { get; }
+    public string? Summary { get; }
+    public string? Remarks { get; }
 }
 /// <summary>
 /// Represents an abstract class that provides information about a declaration.
@@ -21,17 +23,18 @@ public abstract class DeclarationInfo<T> : IDeclarationInfo where T : SyntaxNode
         this.Syntax = syntax;
         this.Trivia = syntax.GetLeadingTrivia().ToList();
         this.Name = GetName();
-        this.Summary = GetSummary();
         this.Accessibility = GetAccessibility();
     }
     public T Syntax { get; private set; }
     public IEnumerable<SyntaxTrivia> Trivia { get; private set; }
     public Accessibility Accessibility { get; private set; }
     public string Name { get; private set; }
-    public string Summary { get; private set; }
-    public abstract string Type { get; }
-    public virtual string FullName => $"{Accessibility} {Type} {Name}";
-
+    public abstract string MemberType { get; }
+    public virtual string FullName => $"{AccessAndModifier} {MemberType} {Name}";
+    public string AccessAndModifier => $"{Accessibility}{(IsStatic ? " static" : "")}";
+    public bool IsStatic => GetModifiers().Any(m => m.IsKind(SyntaxKind.StaticKeyword));
+    public string? Summary => GetXmlDocumentation("summary");
+    public string? Remarks => GetXmlDocumentation("remarks");
 
     private Accessibility GetAccessibility()
     {
@@ -62,24 +65,39 @@ public abstract class DeclarationInfo<T> : IDeclarationInfo where T : SyntaxNode
     }
     private SyntaxTokenList GetModifiers()
     {
-        if (Syntax is MemberDeclarationSyntax member) return member.Modifiers;
-        return default;
+        if (Syntax as MemberDeclarationSyntax is MemberDeclarationSyntax member) return member.Modifiers;
+        return new();
     }
-    private string GetSummary()
+    public string[] GetXMLDocumentations(string? tagName)
     {
-        var summaryTrivia = Trivia.ToList().Find(t => t.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia));
-        var xmlComment = summaryTrivia.GetStructure() as DocumentationCommentTriviaSyntax;
-
-        if (xmlComment != null)
+        var trivia = this.Trivia.FirstOrDefault(t => t.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) || t.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia));
+        var documentationElements = new List<string>();
+        if (trivia != default)
         {
-            var summaryXml = xmlComment.ChildNodes().OfType<XmlElementSyntax>().FirstOrDefault(s => s.StartTag.Name.ToString() == "summary");
-            if (summaryXml != null)
+            var structure = trivia.GetStructure();
+
+            if (structure != null)
             {
-                return string.Join(" ", summaryXml.Content.ToString());
+                var xmlElement = structure.ChildNodes().FirstOrDefault(n => n is XmlElementSyntax element && element.StartTag.Name.ToString() == tagName);
+
+                if (xmlElement != null)
+                {
+                    documentationElements.Add(string.Join(" ", xmlElement.ChildNodes().OfType<XmlTextSyntax>().SelectMany(x => x.TextTokens).Select(t => t.ToString())));
+                }
             }
         }
 
-        return string.Empty;
+        return documentationElements.ToArray();
+    }
+
+    public string? GetXmlDocumentation(string? tagName)
+    {
+        var documentationElements = GetXMLDocumentations(tagName);
+        if (documentationElements.Length > 0)
+        {
+            return documentationElements[0];
+        }
+        return null;
     }
     private string GetName()
     {
