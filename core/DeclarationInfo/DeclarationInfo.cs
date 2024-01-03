@@ -81,20 +81,41 @@ namespace DocGen
 
                 if (structure != null)
                 {
-                    var xmlElements = structure.ChildNodes().Where(n => n is XmlElementSyntax element && element.StartTag.Name.ToString() == tagName);
+                    var xmlElements = structure.ChildNodes().OfType<XmlElementSyntax>().Where(e => e.StartTag.Name.ToString() == tagName);
 
                     if (xmlElements != null)
                     {
                         foreach (var xmlElement in xmlElements)
                         {
-                            Console.WriteLine((xmlElement as XmlElementSyntax)?.GetText());
-                            documentationElements.Add(string.Join(" ", xmlElement.ChildNodes().OfType<XmlTextSyntax>().SelectMany(x => x.TextTokens).Select(t => t.ToString())));
+                            documentationElements.Add($"{ExtractTag(xmlElement)}" + string.Join(" ", xmlElement.ChildNodes().OfType<XmlTextSyntax>().SelectMany(x => x.TextTokens).Select(t => t.ToString())));
                         }
                     }
                 }
             }
 
             return documentationElements.ToArray();
+        }
+
+        private string ExtractTag(XmlElementSyntax xml)
+        {
+            var valueTag = "";
+            if (xml.StartTag.ToString().Contains('"'))
+            {
+                var startTag = xml.StartTag.ToString();
+                bool startedTag = false;
+                foreach (char c in startTag)
+                {
+                    if (c == '"')
+                        if (startedTag)
+                        {
+                            valueTag += ": ";
+                            break;
+                        }
+                        else startedTag = true;
+                    else if (startedTag) valueTag += c;
+                }
+            }
+            return valueTag;
         }
 
         public string? GetXmlDocumentation(string tagName)
