@@ -1,9 +1,11 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public class FieldDeclarationInfo : MemberDeclarationInfo<FieldDeclarationSyntax>
+namespace DocGen
 {
-    public FieldDeclarationInfo(FieldDeclarationSyntax syntax) : base(syntax)
+    public class FieldDeclarationInfo : MemberDeclarationInfo<FieldDeclarationSyntax>
     {
+        public FieldDeclarationInfo(FieldDeclarationSyntax syntax) : base(syntax)
+        {
+        }
+        public override string ReturnType => "Field";
     }
-    public override string ReturnType => "Field";
 }

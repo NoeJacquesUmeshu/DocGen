@@ -2,39 +2,41 @@ using System.Diagnostics;
 using System.Dynamic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public interface ICompositeDeclarationInfo : IDeclarationInfo
+namespace DocGen
 {
-    public IEnumerable<IDeclarationInfo> Childrens { get; }
-}
-public abstract class CompositeDeclarationInfo<T> : DeclarationInfo<T>, ICompositeDeclarationInfo where T : SyntaxNode
-{
-    public IEnumerable<IDeclarationInfo> Childrens => GetChildNodes();
-
-    public CompositeDeclarationInfo(T synthax) : base(synthax)
+    public interface ICompositeDeclarationInfo : IDeclarationInfo
     {
-
+        public IEnumerable<IDeclarationInfo> Childrens { get; }
     }
-
-    protected IEnumerable<IDeclarationInfo> GetChildNodes()
+    public abstract class CompositeDeclarationInfo<T> : DeclarationInfo<T>, ICompositeDeclarationInfo where T : SyntaxNode
     {
-        foreach (var node in Syntax.ChildNodes())
+        public IEnumerable<IDeclarationInfo> Childrens => GetChildNodes();
+
+        public CompositeDeclarationInfo(T synthax) : base(synthax)
         {
-            var nodeInfo = DeclarationInfo<SyntaxNode>.Create(node);
-            if (nodeInfo is null || nodeInfo == this)
-            {
-                continue;
-            }
-            yield return nodeInfo;
+
         }
-    }
 
-    protected IEnumerable<U> GetChildrens<U, V>() where U : DeclarationInfo<V> where V : SyntaxNode
-    {
-        foreach (var child in Childrens)
+        protected IEnumerable<IDeclarationInfo> GetChildNodes()
         {
-            if (child is U)
-                yield return (U)child;
+            foreach (var node in Syntax.ChildNodes())
+            {
+                var nodeInfo = DeclarationInfo<SyntaxNode>.Create(node);
+                if (nodeInfo is null || nodeInfo == this)
+                {
+                    continue;
+                }
+                yield return nodeInfo;
+            }
+        }
+
+        protected IEnumerable<U> GetChildrens<U, V>() where U : DeclarationInfo<V> where V : SyntaxNode
+        {
+            foreach (var child in Childrens)
+            {
+                if (child is U)
+                    yield return (U)child;
+            }
         }
     }
 }

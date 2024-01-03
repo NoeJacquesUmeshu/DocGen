@@ -1,17 +1,19 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public interface IMemberDeclarationInfo : IDeclarationInfo
+namespace DocGen
 {
-    public string ReturnType { get; }
-}
-public class MemberDeclarationInfo<T> : DeclarationInfo<T>, IMemberDeclarationInfo where T : MemberDeclarationSyntax
-{
-    public MemberDeclarationInfo(T syntax) : base(syntax)
+    public interface IMemberDeclarationInfo : IDeclarationInfo
     {
+        public string ReturnType { get; }
     }
-    public override string FullName => $"{AccessAndModifier} {MemberType}{(!string.IsNullOrEmpty(ReturnType) ? $" {MemberType}" : "")} {Name}";
-    public override string MemberType => "";
-    public virtual string ReturnType => "";
+    public class MemberDeclarationInfo<T> : DeclarationInfo<T>, IMemberDeclarationInfo where T : MemberDeclarationSyntax
+    {
+        public MemberDeclarationInfo(T syntax) : base(syntax)
+        {
+        }
+        public override string FullName => $"{AccessAndModifier} {ReturnType} {Name}";
+        public override string MemberType => "";
+        public virtual string ReturnType => GetDescendants<TypeSyntax>().FirstOrDefault()?.GetText()?.ToString() ?? "";
+
+    }
 }

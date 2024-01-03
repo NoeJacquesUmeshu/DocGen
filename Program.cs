@@ -1,9 +1,21 @@
-﻿
+﻿using System.Net;
+using System.Runtime.CompilerServices;
 using DocGen;
-
+/// <summary>
+/// This is the program, now documentated ! 
+/// </summary>
 public static class Program
 {
+    /// <summary>
+    /// This is where the program decides where the stuff goes, on Output/InputPath/htmlStuffs 
+    /// </summary>
     public static string OutputFolder = "";
+
+    /// <summary>
+    /// This is the program's main. This prompts the user for a folder path and generate documentations for each .cs files.
+    /// </summary>
+    /// <param name="args">By typing the path when running the program, you can bypass the prompt section.</param>
+    /// <returns>An async task</returns>
     private static async Task Main(string[] args)
     {
         foreach (string item in args) Console.WriteLine(item);
@@ -30,6 +42,27 @@ public static class Program
         Console.WriteLine("Operation complete !");
     }
 
+    /// <summary>
+    /// description
+    /// </summary>
+    /// <param name="a">summary A</param>
+    /// <param name="b">summary B</param>
+    /// <param name="c">summary C</param>
+    /// <param name="d">D</param>
+    /// <exception cref="OutOfMemoryException"></exception>
+    /// <exception cref="WebException"></exception>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="Exception"></exception>
+    /// <returns>returns a + b + c + d. After 5 exceptions ofc (2 regular exceptions).</returns>
+    private static string ThisIsAMethodWithSomeExceptionsDocumentedAndUndocumented(string a, string b, string c, string d)
+    {
+        throw new OutOfMemoryException();
+        throw new WebException();
+        throw new IndexOutOfRangeException();
+        throw new Exception();
+        throw new Exception();
+        return a + b + c + d;
+    }
     private static async Task GenerateForFolder(string path)
     {
         var csFiles = GetCSFilesInPath(path);

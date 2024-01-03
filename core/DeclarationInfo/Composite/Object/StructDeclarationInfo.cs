@@ -1,10 +1,12 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public class StructDeclarationInfo : ObjectDeclarationInfo<StructDeclarationSyntax>
+namespace DocGen
 {
-    public StructDeclarationInfo(StructDeclarationSyntax syntax) : base(syntax)
+    public class StructDeclarationInfo : ObjectDeclarationInfo<StructDeclarationSyntax>
     {
+        public StructDeclarationInfo(StructDeclarationSyntax syntax) : base(syntax)
+        {
+        }
+        public override string MemberType => "Struct";
     }
-    public override string MemberType => "Struct";
 }

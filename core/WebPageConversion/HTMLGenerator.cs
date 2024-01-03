@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DocGen
 {
@@ -83,8 +76,8 @@ namespace DocGen
             html.AppendLine("<div>");
             html.AppendLine("<h1>" + info.Name + "</h1>");
             html.AppendLine("<p>" + info.FullName + "</p>");
-            html.AppendLine("<p>Summary: " + info.Summary + "</p>");
-            html.AppendLine($"<p>Remarks : {string.Join(", ", info.Remarks)}</p>");
+            html.AppendLine("<p>Summary: " + info.XML_Summary + "</p>");
+            html.AppendLine($"<p>Remarks : {string.Join(", ", info.XML_Remarks)}</p>");
 
             if (!isInterface)
             {
@@ -104,18 +97,6 @@ namespace DocGen
 
             html.AppendLine("</div>");
         }
-
-        private static void GenerateHTMLContentForMember(IMemberDeclarationInfo info, StringBuilder html)
-        {
-            html.AppendLine($"<p>{info.FullName}</p>");
-            html.AppendLine($"<p>Summary : {info.Summary}</p>");
-            if (info as IMethodDeclarationInfo is IMethodDeclarationInfo method)
-            {
-                html.AppendLine($"<p>Parameters : {method.Parameters}</p>");
-                html.AppendLine($"<p>Returns : {method.Returns}</p>");
-                html.AppendLine($"<p>Exceptions : {string.Join(", ", method.Exceptions)}</p>");
-            }
-        }
         private static void GenerateHtmlContentForInfos<T>(string memberName, IEnumerable<T> infos, StringBuilder html) where T : IDeclarationInfo
         {
             html.AppendLine($"<h2>{memberName}</h2>");
@@ -133,7 +114,25 @@ namespace DocGen
                 GenerateHTMLContentForMember(member, html);
             }
         }
+        private static void GenerateHTMLContentForMember(IMemberDeclarationInfo info, StringBuilder html)
+        {
+            WriteHTMLContent("", info.FullName, "h3", html);
+            WriteHTMLContent("Documented Summary", info.XML_Summary, "p", html);
+            if (info as IMethodDeclarationInfo is IMethodDeclarationInfo method)
+            {
+                WriteHTMLContent("Parameters", method.Parameters, "p", html);
+                WriteHTMLContent("Exceptions", method.Exceptions, "p", html);
+                WriteHTMLContent("Documented Parameters", method.XML_Parameters, "p", html);
+                WriteHTMLContent("Documented Returns", method.XML_Returns, "p", html);
+                WriteHTMLContent("Documented Exceptions", method.XML_Exceptions, "p", html);
+            }
+        }
 
+        private static void WriteHTMLContent(string header, string? content, string markup, StringBuilder html) => html.AppendLine(GetElementHTMLContent(content, header, markup));
+        private static void WriteHTMLContent(string header, string[] content, string markup, StringBuilder html) => html.AppendLine(GetArrayHTMLContent(content, header, markup));
+        private static string GetElementHTMLContent(string? content, string header, string markup) => $"<{markup}>{header}{(string.IsNullOrEmpty(header) ? "" : ": ")}{content}</{markup}>";
+        private static string GetArrayHTMLContent(string[] content, string header, string markup) => GetElementHTMLContent(Join(content), header, markup);
+        public static string Join(string[] content) => string.Join(", ", content);
 
         private static void GenerateHMTLContentForComposite(ICompositeDeclarationInfo info, StringBuilder html)
         {

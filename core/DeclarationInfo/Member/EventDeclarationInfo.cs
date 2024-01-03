@@ -1,12 +1,12 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public class EventDeclarationInfo : MemberDeclarationInfo<EventDeclarationSyntax>
+namespace DocGen
 {
-    public EventDeclarationInfo(EventDeclarationSyntax syntax) : base(syntax)
+    public class EventDeclarationInfo : MemberDeclarationInfo<EventDeclarationSyntax>
     {
+        public EventDeclarationInfo(EventDeclarationSyntax syntax) : base(syntax)
+        {
+        }
+        public override string MemberType => "Event";
     }
-    public override string MemberType => "Event";
 }
-
-

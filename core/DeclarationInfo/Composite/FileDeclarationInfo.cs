@@ -1,10 +1,12 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public class FileDeclarationInfo : CompositeDeclarationInfo<CompilationUnitSyntax>
+namespace DocGen
 {
-    public FileDeclarationInfo(CompilationUnitSyntax syntax) : base(syntax)
+    public class FileDeclarationInfo : CompositeDeclarationInfo<CompilationUnitSyntax>
     {
-    }
+        public FileDeclarationInfo(CompilationUnitSyntax syntax) : base(syntax)
+        {
+        }
 
-    public override string MemberType => "File";
+        public override string MemberType => "File";
+    }
 }

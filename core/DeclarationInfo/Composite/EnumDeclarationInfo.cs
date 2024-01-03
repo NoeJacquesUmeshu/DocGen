@@ -1,14 +1,15 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-public class EnumDeclarationInfo : CompositeDeclarationInfo<EnumDeclarationSyntax>
+namespace DocGen
 {
-    public EnumDeclarationInfo(EnumDeclarationSyntax syntax) : base(syntax)
+    public class EnumDeclarationInfo : CompositeDeclarationInfo<EnumDeclarationSyntax>
     {
+        public EnumDeclarationInfo(EnumDeclarationSyntax syntax) : base(syntax)
+        {
 
+        }
+        public IReadOnlyCollection<IDeclarationInfo> EnumMembers => GetChildrens<MemberDeclarationInfo<EnumMemberDeclarationSyntax>, EnumMemberDeclarationSyntax>().ToList();
+
+        public override string MemberType => "Enum";
     }
-    public IReadOnlyCollection<IDeclarationInfo> EnumMembers => GetChildrens<MemberDeclarationInfo<EnumMemberDeclarationSyntax>, EnumMemberDeclarationSyntax>().ToList();
-
-    public override string MemberType => "Enum";
 }
-
