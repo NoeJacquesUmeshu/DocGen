@@ -24,7 +24,11 @@ namespace DocGen
 
         private static async Task WriteCompositeHTML(ICompositeDeclarationInfo info)
         {
-            if (info as IObjetDeclarationInfo is IObjetDeclarationInfo objectInfo)
+            if (info is NamespaceDeclarationInfo namespaceDeclarationInfo)
+            {
+                await Write(namespaceDeclarationInfo);
+            }
+            else if (info as IObjetDeclarationInfo is IObjetDeclarationInfo objectInfo)
             {
                 await WriteObjectHTML(objectInfo);
             }

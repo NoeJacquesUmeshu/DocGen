@@ -1,6 +1,34 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
 using DocGen;
+
+/// <summary>
+/// This is an example class. It's purpouse is to be documented and tested with the program.
+/// </summary>
+internal class Example
+{
+    /// <summary>
+    /// This method throws 5 exceptions. Only 4 are documented ! 
+    /// </summary>
+    /// <param name="a">XML Summary of A</param>
+    /// <param name="b">XML Summary of B</param>
+    /// <param name="c">XML Summary of C</param>
+    /// <param name="d">XML Summary of D</param>
+    /// <exception cref="OutOfMemoryException"></exception>
+    /// <exception cref="WebException"></exception>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="Exception"></exception>
+    /// <returns>returns a + b + c + d. After throwing 5 consecutive exceptions, of course ! (2 regular exceptions).</returns>
+    private static string ExampleMethod(string a, string b, string c, string d)
+    {
+        throw new OutOfMemoryException();
+        throw new WebException();
+        throw new IndexOutOfRangeException();
+        throw new Exception();
+        throw new Exception();
+        return a + b + c + d;
+    }
+}
 /// <summary>
 /// This is the program, now documentated ! 
 /// </summary>
@@ -42,34 +70,10 @@ public static class Program
         Console.WriteLine("Operation complete !");
     }
 
-    /// <summary>
-    /// description
-    /// </summary>
-    /// <param name="a">summary A</param>
-    /// <param name="b">summary B</param>
-    /// <param name="c">summary C</param>
-    /// <param name="d">D</param>
-    /// <exception cref="OutOfMemoryException"></exception>
-    /// <exception cref="WebException"></exception>
-    /// <exception cref="IndexOutOfRangeException"></exception>
-    /// <exception cref="Exception"></exception>
-    /// <returns>returns a + b + c + d. After 5 exceptions ofc (2 regular exceptions).</returns>
-    private static string ThisIsAMethodWithSomeExceptionsDocumentedAndUndocumented(string a, string b, string c, string d)
-    {
-        throw new OutOfMemoryException();
-        throw new WebException();
-        throw new IndexOutOfRangeException();
-        throw new Exception();
-        throw new Exception();
-        return a + b + c + d;
-    }
+
     private static async Task GenerateForFolder(string path)
     {
         var csFiles = GetCSFilesInPath(path);
-        if (csFiles.Length < 1)
-        {
-            return;
-        }
         Console.WriteLine($"Generating documentation for {path}");
         var tasks = new List<Task>();
         foreach (var csFilePath in csFiles)

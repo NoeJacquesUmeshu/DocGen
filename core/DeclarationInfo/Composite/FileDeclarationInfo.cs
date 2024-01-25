@@ -9,4 +9,13 @@ namespace DocGen
 
         public override string MemberType => "File";
     }
+
+    public class NamespaceDeclarationInfo : CompositeDeclarationInfo<BaseNamespaceDeclarationSyntax>
+    {
+        public NamespaceDeclarationInfo(BaseNamespaceDeclarationSyntax syntax) : base(syntax)
+        {
+        }
+
+        public override string MemberType => "Namespace Declaration";
+    }
 }

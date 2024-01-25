@@ -184,6 +184,8 @@ namespace DocGen
                     return new DelegateDeclarationInfo(@delegate);
                 case CompilationUnitSyntax compilationUnit:
                     return new FileDeclarationInfo(compilationUnit);
+                case BaseNamespaceDeclarationSyntax @namespace:
+                    return new NamespaceDeclarationInfo(@namespace);
                 default: return null!;
             }
         }
